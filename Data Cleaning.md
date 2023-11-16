@@ -13,7 +13,7 @@ SELECT *
 FROM haus_kaufen
 ```
 
-| link-href                              | anzeige                                                                        | wohnfläche | zimmer | grundstück | ort                     | kaufpreis | kategorie        | makler                                                          | baujahr | effizienzklasse |
+| link                                   | anzeige                                                                        | wohnfläche | zimmer | grundstück | ort                     | kaufpreis | kategorie        | makler                                                          | baujahr | effizienzklasse |
 |----------------------------------------|--------------------------------------------------------------------------------|------------|--------|------------|-------------------------|-----------|------------------|-----------------------------------------------------------------|---------|-----------------|
 | https://www.immowelt.de/expose/2qxg74e | - NRW- Mehrfamilienhäuser im Paket (Top Investment)-                           |            |        |            | 50667 Köln              | 4.350.000 | Mehrfamilienhaus | Muzi-Berlin Immobilien & Finanzdienst e. K.-seit 1992           | 1900    |                 |
 | https://www.immowelt.de/expose/22ft55u | Großes Reihenendhaus mit Zinszuschuss und Bezugsfertigkeit noch in diesem Jahr | 160        | 4      | 295        | 51145 Köln              | 669.990   | Reihenendhaus    | INTERHOMES AG                                                   |         | A+              |
@@ -66,7 +66,7 @@ ORDER BY anzeige ASC;
 
 
 
-| link-href                              | anzeige                                                                                                                | wohnfläche | zimmer | grundstück | ort                 | kaufpreis       | kategorie               | makler                                                | baujahr | effizienzklasse |
+| link                                   | anzeige                                                                                                                | wohnfläche | zimmer | grundstück | ort                 | kaufpreis       | kategorie               | makler                                                | baujahr | effizienzklasse |
 |----------------------------------------|------------------------------------------------------------------------------------------------------------------------|------------|--------|------------|---------------------|-----------------|-------------------------|-------------------------------------------------------|---------|-----------------|
 | https://www.immowelt.de/expose/22ul85z | ***NEUE PLANUNG: Demnächst 30-Familienhaus mit TG-Stellplätzen zu Topkonditionen in Porz***                            | 2500       | 90     | 3000       | 51145 Köln          | 9.000.000       | Mehrfamilienhaus        | Emlak AG                                              | 2024    |                 |
 | https://www.immowelt.de/expose/228q85z | ***NEUE PLANUNG: Demnächst 30-Familienhaus mit TG-Stellplätzen zu Topkonditionen in Porz***                            | 2500       |        | 3000       | 51145 Köln          | 9.000.000       | Mehrfamilienhaus        | Emlak AG                                              | 2024    |                 |
