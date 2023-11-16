@@ -1,10 +1,9 @@
-**DATA CLEANING**
+# DATA CLEANING
 
-** 1. HAUS_KAUFEN table **
+## 1. HAUS_KAUFEN table 
 
 
-
-a. Explore the table structure
+### a. Explore the table structure
 
 
 
@@ -25,7 +24,7 @@ FROM haus_kaufen
 
 
 
-b. Manage duplicates
+### b. Manage duplicates
  
 ```sql
 -- Number of ads for houses in sale, seeing if ther are duplicate ads
@@ -289,8 +288,163 @@ ORDER BY anzeige ASC;
 | https://www.immowelt.de/expose/2cdhx58 | Köln-Porz                                                                       | Ihr Eigenheim mit langfristiger Wertsteigerung - energieeffizienter Neubau | 143    | 6          | 286        | 51145 Köln | 649.900          | Reihenendhaus              | Werner Wohnbau GmbH &Co.KG | 2023            |         |
 
 
-c. Manage missing value
+### c. Manage missing value
+
+```sql
+-- Identified the number of null values in the column "wohnfläche"
+
+SELECT 
+    count(anzeige) as null_wohnfläche
+FROM 
+    haus_kaufen
+WHERE
+    wohnfläche = ""
+```
+
+| null_wohnfläche |
+|-----------------|
+| 1               |
+
+```sql
+-- Investigate the null value in the column "wohnfläche"
+
+SELECT *
+FROM haus_kaufen
+WHERE wohnfläche = ""
+```
+
+| link                                   | anzeige                                              | wohnfläche | zimmer | grundstück | ort        | kaufpreis | kategorie        | makler                                                | baujahr | effizienzklasse | ref_num |
+|----------------------------------------|------------------------------------------------------|------------|--------|------------|------------|-----------|------------------|-------------------------------------------------------|---------|-----------------|---------|
+| https://www.immowelt.de/expose/2qxg74e | - NRW- Mehrfamilienhäuser im Paket (Top Investment)- |            |        |            | 50667 Köln | 4.350.000 | Mehrfamilienhaus | Muzi-Berlin Immobilien & Finanzdienst e. K.-seit 1992 | 1900    |                 | 2qxg74e |
+
+```sql
+-- It seems to be a sort of spam AD and it refers to the region NRW. From the link there´s only a picture with a skyscraper
+-- Anyway it isn´t helpful for the analysis due to the lack of the house characteristics data.
+-- delete
+```
+
+```sql
+-- Identified the number of null values in the column "zimmer"
+
+SELECT 
+    COUNT(*) as null_zimmer,
+    (COUNT(*) / (SELECT COUNT(*) FROM haus_kaufen)) * 100 AS percent
+FROM 
+    haus_kaufen
+WHERE 
+    zimmer = "";
+```
+    
+| null_zimmer | percent |
+|-------------|---------|
+| 74          | 16.8565 |
+
+```sql
+-- searched for values about the number of rooms in the ad
+SELECT ref_num, anzeige
+FROM haus_kaufen
+WHERE zimmer = "" AND anzeige LIKE "%zimmer%"
+```
+
+| ref_num | anzeige                                                |
+|---------|--------------------------------------------------------|
+| 2a3n45m | Attraktive 2-Zimmer-Wohnung mit Balkon in Köln-Mülheim |
+
+```sql
+-- replaced the null value of the room with "2" for the ad "2a3n45m"
+
+UPDATE haus_kaufen
+SET zimmer = 2
+WHERE ref_num = '2a3n45m';
+```
+
+| fieldCount | affectedRows | insertId | info                                   | serverStatus | warningStatus | changedRows |
+|------------|--------------|----------|----------------------------------------|--------------|---------------|-------------|
+| 0          | 1            | 0        | Rows matched: 1 Changed: 1 Warnings: 0 | 34           | 0             | 1           |
 
 
+```sql
+SELECT ref_num, anzeige, zimmer
+FROM haus_kaufen
+WHERE ref_num = '2a3n45m';
+```
+
+| ref_num | anzeige                                                | zimmer |
+|---------|--------------------------------------------------------|--------|
+| 2a3n45m | Attraktive 2-Zimmer-Wohnung mit Balkon in Köln-Mülheim | 2      |
 
 
+```sql
+-- Identified the number of null values in the column "grundstück"
+
+SELECT 
+    count(anzeige) as null_grundstück
+FROM 
+    haus_kaufen
+WHERE
+    grundstück = ""
+```
+
+| null_grundstück |
+|-----------------|
+| 34              |
+
+#### It can be assumed that ads that do not contain information on the number of square meters of land do not have a plot of land.
+#### For this reason the null values can be replaced with "0"
+
+```sql
+-- replace
+```
+
+```sql
+-- Identified the number of null values in the column "ort"
+
+SELECT 
+    count(anzeige) as null_ort
+FROM 
+    haus_kaufen
+WHERE
+    ort = ""
+```
+
+| null_kategorie |
+|----------------|
+| 1              |
+
+```sql
+-- Identified the number of null values in the column "kategorie"
+
+SELECT 
+    count(anzeige) as null_kategorie
+FROM 
+    haus_kaufen
+WHERE
+    kategorie = ""
+```
+
+| null_kategorie |
+|----------------|
+| 1              |
+
+```sql
+-- Investigate the null value
+
+SELECT *
+FROM 
+    haus_kaufen
+WHERE
+    kategorie = ""
+```
+
+| link                                   | anzeige              | wohnfläche | zimmer | grundstück | ort          | kaufpreis | kategorie | makler | baujahr | effizienzklasse | ref_num |
+|----------------------------------------|----------------------|------------|--------|------------|--------------|-----------|-----------|--------|---------|-----------------|---------|
+| https://www.immowelt.de/expose/2a7z75y | Watamu Privatanwesen | 1          | 5      | 1          | 80202 Watamu | 398.000   |           |        |         |                 | 2a7z75y |
+
+
+#### The ad that hasn´t a category, refers to a city in Kenya, for this reason can be delete as out of scope of the analysis.
+#### The anomaly would come out with the outliers analysis 
+
+
+```sql
+-- delete
+```
