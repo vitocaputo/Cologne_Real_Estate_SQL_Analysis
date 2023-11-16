@@ -1,8 +1,12 @@
 **DATA CLEANING**
 
-1. HAUS_KAUFEN table
+** 1. HAUS_KAUFEN table **
+
+
 
 a. Explore the table structure
+
+
 
 ```sql
 SELECT *
@@ -16,6 +20,9 @@ FROM haus_kaufen
 | https://www.immowelt.de/expose/24aqr5x | Früher an später denken!                                                       | 180        | 5      | 242        | 50997 Köln / Meschenich | 499.000   | Reihenendhaus    | FALC Immobilien GmbH & Co. KG                                   | 2002    |                 |
 | https://www.immowelt.de/expose/258cc53 | Vermietetes Reihenmittelhaus in ruhiger Lage                                   | 91         | 4      | 197        | 51067 Köln              | 434.000   | Reihenmittelhaus | VON POLL IMMOBILIEN Köln-Dellbrück - Anna Sodki Immobilien GmbH | 1963    | G               |
 | https://www.immowelt.de/expose/25eyv5u | CGN Köln Mehrfamilienhaus                                                      | 764        | 25     | 562        | 50670 Köln              | 3.165.000 | Mehrfamilienhaus |                                                                 |         |                 |
+
+
+
 
 
 b. Manage duplicates
@@ -40,6 +47,9 @@ FROM (
 |-----------|------------|----------------------|
 | 481       | 435        | 46                   |
 
+
+
+
 ```sql
 -- it seems to be that 46 ads are duplicates, tried to understand if these are all to remove
 
@@ -53,6 +63,9 @@ WHERE anzeige IN (
 )
 ORDER BY anzeige ASC;
 ```
+
+
+
 | link-href                              | anzeige                                                                                                                | wohnfläche | zimmer | grundstück | ort                 | kaufpreis       | kategorie               | makler                                                | baujahr | effizienzklasse |
 |----------------------------------------|------------------------------------------------------------------------------------------------------------------------|------------|--------|------------|---------------------|-----------------|-------------------------|-------------------------------------------------------|---------|-----------------|
 | https://www.immowelt.de/expose/22ul85z | ***NEUE PLANUNG: Demnächst 30-Familienhaus mit TG-Stellplätzen zu Topkonditionen in Porz***                            | 2500       | 90     | 3000       | 51145 Köln          | 9.000.000       | Mehrfamilienhaus        | Emlak AG                                              | 2024    |                 |
@@ -148,6 +161,8 @@ ORDER BY anzeige ASC;
 | https://www.immowelt.de/expose/2cdkg5c | Zweifamilienhaus in 51107 Köln, Frankfurter Str.                                                                       | 290        |        | 1291       | 51107 Köln          | 1.180.000       | Mehrfamilienhaus        | Argetra GmbH                                          | 2013    |                 |
 | https://www.immowelt.de/expose/2cgha5c | Zweifamilienhaus in 51107 Köln, Frankfurter Str.                                                                       | 290        |        | 1291       | 51107 Köln          | 1.180.000       | Mehrfamilienhaus        | Argetra GmbH                                          | 2013    |                 |
 
+
+
 ```sql
 /* Investigated the differences between duplicates and selected the rows to remove
 
@@ -197,18 +212,22 @@ https://www.immowelt.de/expose/2cgha5c duplicate
 https://www.immowelt.de/expose/2bmuc56 Wohn- und Geschäftshaus (change)
 /*
 ```
+
 ```sql
 -- added a new column with a ref_num, took from the link column
 
 ALTER TABLE haus_kaufen
 ADD COLUMN ref_num VARCHAR(255);
 ```
+
 ```sql
 UPDATE haus_kaufen
 SET ref_num = SUBSTRING(link, LENGTH('https://www.immowelt.de/expose/') + 1);
 ```
+
 ```sql
 -- checked the presence of the new column in the table
+
 SELECT *
 FROM haus_kaufen
 WHERE anzeige IN (
@@ -219,9 +238,12 @@ WHERE anzeige IN (
 )
 ORDER BY anzeige ASC;
 ```
+
+
 | link                                   | anzeige                                                                               | wohnfläche | zimmer | grundstück | ort        | kaufpreis | kategorie        | makler   | baujahr | effizienzklasse | ref_num |
 |----------------------------------------|---------------------------------------------------------------------------------------|------------|--------|------------|------------|-----------|------------------|----------|---------|-----------------|---------|
 | https://www.immowelt.de/expose/22ul85z | NEUE PLANUNG: Demnächst 30-Familienhaus mit TG-Stellplätzen zu Topkonditionen in Porz | 2500       | 90     | 3000       | 51145 Köln | 9.000.000 | Mehrfamilienhaus | Emlak AG | 2024    |                 | 22ul85z |
+
 
 ```sql
 -- deleted the selected duplicates
@@ -235,6 +257,7 @@ WHERE ref_num IN("228q85z", "2c6jv5c", "2curu5c", "2cmru5c", "2czru5c", "2cjbm52
 									"2c3zy59", "2czz95c", "2cd775c", "2bgjx5d", "2ccrt59", "2bmuc56",
 									"2ctd953", "2c7gz5d", "2c5g853", "2bqnw5z", "2cfk75c", "2cgha5c")
 ```
+
 ```sql
 -- verified if the selected rows are deleted
 
@@ -250,6 +273,8 @@ ORDER BY anzeige ASC;
 
 -- the remaining rows refer to the ads that have the same title but different information in price, living surface, rooms or plot
 ```
+
+
 | link                                   | anzeige                                                                         | wohnfläche                                                                 | zimmer | grundstück | ort        | kaufpreis  | kategorie        | makler                     | baujahr                    | effizienzklasse | ref_num |
 |----------------------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------|--------|------------|------------|------------|------------------|----------------------------|----------------------------|-----------------|---------|
 | https://www.immowelt.de/expose/29upt5f | AM KÖLNGALOPP, Leben auf Sonnengrundstücken-Haus Optima                         | 175                                                                        | 6      | 261        | 50735 Köln | 989.900    | Wohnanlage       | RSE Bau GmbH               | 2023                       |                 | 29upt5f |
@@ -262,4 +287,10 @@ ORDER BY anzeige ASC;
 | https://www.immowelt.de/expose/2clhx58 | Klimafreundliches Wohngebäude mit QNG - Nachhaltiges Wohnen auf höchstem Niveau | 143                                                                        | 6      | 286        | 51145 Köln | 724.900    | Reihenendhaus    | Werner Wohnbau GmbH &Co.KG | 2023                       |                 | 2clhx58 |
 | https://www.immowelt.de/expose/2cahx58 | Köln-Porz                                                                       | Ihr Eigenheim mit langfristiger Wertsteigerung - energieeffizienter Neubau | 143    | 6          | 211        | 51145 Köln | 614.900          | Reihenmittelhaus           | Werner Wohnbau GmbH &Co.KG | 2023            |         |
 | https://www.immowelt.de/expose/2cdhx58 | Köln-Porz                                                                       | Ihr Eigenheim mit langfristiger Wertsteigerung - energieeffizienter Neubau | 143    | 6          | 286        | 51145 Köln | 649.900          | Reihenendhaus              | Werner Wohnbau GmbH &Co.KG | 2023            |         |
+
+
+c. Manage missing value
+
+
+
 
