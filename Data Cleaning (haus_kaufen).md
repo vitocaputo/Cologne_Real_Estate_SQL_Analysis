@@ -219,25 +219,6 @@ SET ref_num = SUBSTRING(link, LENGTH('https://www.immowelt.de/expose/') + 1);
 ALTER TABLE `immo_köln`.`haus_kaufen` 
 CHANGE COLUMN `ref_num` `ref_num` VARCHAR(255) NULL DEFAULT NULL AFTER `link`;
 ```
-```sql
--- checked the presence of the new column in the table
-
-SELECT *
-FROM haus_kaufen
-WHERE anzeige IN (
-    SELECT anzeige
-    FROM haus_kaufen
-    GROUP BY anzeige
-    HAVING COUNT(*) > 1
-)
-ORDER BY anzeige ASC;
-```
-
-
-| link                                   | anzeige                                                                               | wohnfläche | zimmer | grundstück | ort        | kaufpreis | kategorie        | makler   | baujahr | effizienzklasse | ref_num |
-|----------------------------------------|---------------------------------------------------------------------------------------|------------|--------|------------|------------|-----------|------------------|----------|---------|-----------------|---------|
-| https://www.immowelt.de/expose/22ul85z | NEUE PLANUNG: Demnächst 30-Familienhaus mit TG-Stellplätzen zu Topkonditionen in Porz | 2500       | 90     | 3000       | 51145 Köln | 9.000.000 | Mehrfamilienhaus | Emlak AG | 2024    |                 | 22ul85z |
-
 
 ```sql
 -- deleted the selected duplicates
