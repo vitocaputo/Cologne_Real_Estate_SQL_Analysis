@@ -179,50 +179,53 @@ WHERE ref_num IN("2cmqt5c", "2c6wt5c", "2cbmt5c", "2cxut5c",
 # c. Manage missing values
 
 ---
-
+```sql
 SELECT count(anzeige) as null_wohnfläche
 FROM wohnung_kaufen
 WHERE wohnfläche = 0
-
+```
 
 | null_wohnfläche |
 |-----------------|
 | 1               |
 
-
+```sql
 -- Identified the number of null values in the column "wohnfläche"
 SELECT *
 FROM wohnung_kaufen
 WHERE wohnfläche = 0
+```
 
 | link                                   | ref_num | anzeige                     | wohnfläche | zimmer | ort                   | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler |
 |----------------------------------------|---------|-----------------------------|------------|--------|-----------------------|-----------|----------|--------------|---------|-----------------|--------|
 | https://www.immowelt.de/expose/2czsn57 | 2czsn57 | Ihre neue 2-Zimmer-Wohnung! | k.A.       | 2      | 51065 Köln  (Mülheim) | 219000    | 180      | 3. Geschoss  | 1954    | C               |        |
 
-
+```sql
 -- Searched in the ad the information about living area
 -- Found that the apartment has a living area of 62 sm
 
 UPDATE wohnung_kaufen
 SET wohnfläche = 62
 WHERE ref_num = "2czsn57"
-
-
+```
+```sql
 -- Identified the number of null values in the column "zimmer"
 
 SELECT count(anzeige) as null_zimmer
 FROM wohnung_kaufen
 WHERE zimmer = 0
+```
 
 | null_zimmer |
 |-------------|
 | 13          |
 
 
-
+```sql
 SELECT *
 FROM wohnung_kaufen
 WHERE zimmer = 0
+```
 
 | link                                   | ref_num | anzeige                                                                                  | wohnfläche | zimmer | ort                        | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                                      |
 |----------------------------------------|---------|------------------------------------------------------------------------------------------|------------|--------|----------------------------|-----------|----------|--------------|---------|-----------------|---------------------------------------------|
@@ -257,77 +260,85 @@ Information following the link:
 2b6zx5x -> 3
 2cy6h53 -> 3
 
-
+```sql
 UPDATE wohnung_kaufen
 SET zimmer = 2
 WHERE ref_num IN("2bgxe58", "2b6sa5p", "2b2gw5p")
-
+```
+```sql
 UPDATE wohnung_kaufen
 SET zimmer = 3
 WHERE ref_num IN("27z3n5f", "27dts5f", "2ban958", "2bpjw5m", "2b4fw5p", 
                 "2bvgu5t", "2bw5t5v", "2b6zx5x", "2cy6h53")
 
-
-
+```
+```sql
 SELECT *
 FROM wohnung_kaufen
 WHERE zimmer = 0
+```
 
 | link                                   | ref_num | anzeige                                                       | wohnfläche | zimmer | ort                        | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                |
 |----------------------------------------|---------|---------------------------------------------------------------|------------|--------|----------------------------|-----------|----------|--------------|---------|-----------------|-----------------------|
 | https://www.immowelt.de/expose/2ap3n5v | 2ap3n5v | Interessante Kapitalanlage im 4 Sterne Hotel Mercure in Köln! | 60         | k.A.   | 50676 Köln  (Altstadt-Süd) | 195000    |          |              | 1989    | D               | Immo Projekte P2 GmbH |
 
+```sql
 -- It remains only an ad that refers to an hotel room. 
 -- Due to the nature of the offer, provided to delete it
 
 DELETE 
 FROM wohnung_kaufen
 WHERE ref_num = "2ap3n5v"
-
+```
+```sql
 -- Identified the number of null values in the column "ort"
 
 SELECT count(anzeige) as null_ort
 FROM wohnung_kaufen
 WHERE ort = ""
-
+```
 
 | null_ort |
 |----------|
 | 0        |
 
-
+```sql
 -- Identified the number of null values in the column "kaufpreis"
 SELECT count(anzeige) as null_kaufpreis
 FROM wohnung_kaufen
 WHERE kaufpreis = 0
+```
 
 | null_kaufpreis |
 |----------------|
 | 2              |
 
+
+```sql
 SELECT *
 FROM wohnung_kaufen
 WHERE kaufpreis = 0
+```
 
 | link                                   | ref_num | anzeige                                                                             | wohnfläche | zimmer | ort                        | kaufpreis   | hausgeld | wohnungslage               | baujahr | effizienzklasse | makler                        |
 |----------------------------------------|---------|-------------------------------------------------------------------------------------|------------|--------|----------------------------|-------------|----------|----------------------------|---------|-----------------|-------------------------------|
 | https://www.immowelt.de/expose/2btgf57 | 2btgf57 | Preis auf Anfrage: Apartment in Köln-Nippes, ca. 35 qm, vermietet.                  | 35         | 1      | 50733 Köln  (Nippes)       | auf Anfrage | 170      | 1. Geschoss                | 1993    | D               | Tre Orsetti Cologne e.K.      |
 | https://www.immowelt.de/expose/2c5rj5c | 2c5rj5c | Top-Investment: 6,5 % Rendite p.a. mit Eigentumswohnung in Köln-Südstadt, Ubierring | 140        | 4      | 50678 Köln  (Neustadt-Süd) | auf Anfrage |          | 4. Geschoss (Dachgeschoss) | 1906    |                 | Stiftungsberatung Dr. Kade KG |
 
-
+```sql
 -- deleted the 2 rows due to the lack in price (only by request)
 
 DELETE
 FROM wohnung_kaufen
 WHERE kaufpreis = 0
-
-
+```
+```sql
 -- Identified the number of null values in the column "hausgeld"
 
 SELECT count(ref_num) as null_hausgeld
 FROM wohnung_kaufen
 WHERE hausgeld = 0
-
+```
 
 
 
