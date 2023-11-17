@@ -1,12 +1,9 @@
 # DATA CLEANING
 
-## 1. HAUS_KAUFEN table 
-
+## HAUS_KAUFEN table 
 
 ### a. Explore the table structure
-
-
-
+---
 ```sql
 SELECT *
 FROM haus_kaufen
@@ -19,13 +16,11 @@ FROM haus_kaufen
 | https://www.immowelt.de/expose/24aqr5x | Früher an später denken!                                                       | 180        | 5      | 242        | 50997 Köln / Meschenich | 499.000   | Reihenendhaus    | FALC Immobilien GmbH & Co. KG                                   | 2002    |                 |
 | https://www.immowelt.de/expose/258cc53 | Vermietetes Reihenmittelhaus in ruhiger Lage                                   | 91         | 4      | 197        | 51067 Köln              | 434.000   | Reihenmittelhaus | VON POLL IMMOBILIEN Köln-Dellbrück - Anna Sodki Immobilien GmbH | 1963    | G               |
 | https://www.immowelt.de/expose/25eyv5u | CGN Köln Mehrfamilienhaus                                                      | 764        | 25     | 562        | 50670 Köln              | 3.165.000 | Mehrfamilienhaus |                                                                 |         |                 |
-
-
-
-
+---
 
 ### b. Manage duplicates
- 
+
+---
 ```sql
 -- Number of ads for houses in sale, seeing if ther are duplicate ads
 
@@ -303,11 +298,12 @@ WHERE ref_num = '2bmuc56'
 | link                                   | ref_num | anzeige                                          | wohnfläche | zimmer | grundstück | ort        | kaufpreis | kategorie               | makler                                             | baujahr | effizienzklasse |
 |----------------------------------------|---------|--------------------------------------------------|------------|--------|------------|------------|-----------|-------------------------|----------------------------------------------------|---------|-----------------|
 | https://www.immowelt.de/expose/2bmuc56 | 2bmuc56 | Wohn- und Geschäftshaus in Top Lage in Köln-Sülz | 252        | 15     | 387        | 50937 Köln | 1.890.000 | Wohn- und Geschäftshaus | Kölner Haus- und Grundbesitzverein Immobilien GmbH | 1906    | E               |
-
+---
 
 
 ### c. Manage missing value
 
+---
 ```sql
 -- Identified the number of null values in the column "wohnfläche"
 
@@ -526,11 +522,13 @@ WHERE
 | null_baujahr |
 |--------------|
 | 85           |
+---
+
 
 ### d. Convert Data Type
 #### All the values are imported in mySQL as a string. The data have to be modified before convert the data type
 
-
+---
 ```sql
 -- Converted wohnfläche and grundstück in float values
 
