@@ -174,31 +174,159 @@ WHERE ref_num IN("2cmqt5c", "2c6wt5c", "2cbmt5c", "2cxut5c",
                 "2crf75c", "2cjma5c", "2csqt5c", "272pz5f",
                 "29q6856", "2c8t45c", "2bxct5z", "27j255h", "2cvnf57")
 ```
+---
+
+# c. Manage missing values
+
+---
+
+SELECT count(anzeige) as null_wohnfläche
+FROM wohnung_kaufen
+WHERE wohnfläche = 0
+
+
+| null_wohnfläche |
+|-----------------|
+| 1               |
+
+
+-- Identified the number of null values in the column "wohnfläche"
+SELECT *
+FROM wohnung_kaufen
+WHERE wohnfläche = 0
+
+| link                                   | ref_num | anzeige                     | wohnfläche | zimmer | ort                   | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler |
+|----------------------------------------|---------|-----------------------------|------------|--------|-----------------------|-----------|----------|--------------|---------|-----------------|--------|
+| https://www.immowelt.de/expose/2czsn57 | 2czsn57 | Ihre neue 2-Zimmer-Wohnung! | k.A.       | 2      | 51065 Köln  (Mülheim) | 219000    | 180      | 3. Geschoss  | 1954    | C               |        |
+
+
+-- Searched in the ad the information about living area
+-- Found that the apartment has a living area of 62 sm
+
+UPDATE wohnung_kaufen
+SET wohnfläche = 62
+WHERE ref_num = "2czsn57"
+
+
+-- Identified the number of null values in the column "zimmer"
+
+SELECT count(anzeige) as null_zimmer
+FROM wohnung_kaufen
+WHERE zimmer = 0
+
+| null_zimmer |
+|-------------|
+| 13          |
 
 
 
+SELECT *
+FROM wohnung_kaufen
+WHERE zimmer = 0
+
+| link                                   | ref_num | anzeige                                                                                  | wohnfläche | zimmer | ort                        | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                                      |
+|----------------------------------------|---------|------------------------------------------------------------------------------------------|------------|--------|----------------------------|-----------|----------|--------------|---------|-----------------|---------------------------------------------|
+| https://www.immowelt.de/expose/27z3n5f | 27z3n5f | Stilvoll! Vermietete 3-Zimmer-Wohnung als Kapitalanlage zu verkaufen! ( WE 5 )           | 65         | k.A.   | 50674 Köln  (Neustadt-Süd) | 391560    | 5041     | 6. Geschoss  |         |                 | GLOBAL-ACT GmbH                             |
+| https://www.immowelt.de/expose/27dts5f | 27dts5f | Sinfonie der Großstadt! Vermietete 3-Zimmer-Wohnung als Kapitalanlage zu verkaufen! WE 8 | 68         | k.A.   | 50674 Köln  (Neustadt-Süd) | 399000    |          | 3. Geschoss  |         |                 | GLOBAL-ACT GmbH                             |
+| https://www.immowelt.de/expose/2ap3n5v | 2ap3n5v | Interessante Kapitalanlage im 4 Sterne Hotel Mercure in Köln!                            | 60         | k.A.   | 50676 Köln  (Altstadt-Süd) | 195000    |          |              | 1989    | D               | Immo Projekte P2 GmbH                       |
+| https://www.immowelt.de/expose/2ban958 | 2ban958 | Handwerker aufgepasst, gut aufgeteilte 3 Zimmer Wohnung                                  | 66         | k.A.   | 51147 Köln  (Wahnheide)    | 169500    | 316      | Erdgeschoss  | 1963    |                 | Klaus-Peter Heine Immobilienverwaltung GmbH |
+| https://www.immowelt.de/expose/2bgxe58 | 2bgxe58 | Eigentumswohnung in 50823 Köln                                                           | 42         | k.A.   | 50823 Köln  (Neuehrenfeld) | 140000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2bpjw5m | 2bpjw5m | Eigentumswohnung in 50735 Köln                                                           | 82         | k.A.   | 50735 Köln  (Riehl)        | 145000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2b6sa5p | 2b6sa5p | Eigentumswohnung in 51149 Köln                                                           | 65         | k.A.   | 51149 Köln  (Westhoven)    | 180000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2b4fw5p | 2b4fw5p | Eigentumswohnung in 50933 Köln                                                           | 143        | k.A.   | 50933 Köln  (Braunsfeld)   | 949000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2b2gw5p | 2b2gw5p | Eigentumswohnung in 51147 Köln                                                           | 62         | k.A.   | 51147 Köln  (Grengel)      | 190000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2bvgu5t | 2bvgu5t | Eigentumswohnung in 51149 Köln                                                           | 90         | k.A.   | 51149 Köln  (Porz)         | 225000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2bw5t5v | 2bw5t5v | Eigentumswohnung in 51063 Köln                                                           | 72         | k.A.   | 51063 Köln  (Mülheim)      | 205000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2b6zx5x | 2b6zx5x | Eigentumswohnung in 50999 Köln                                                           | 95         | k.A.   | 50999 Köln  (Sürth)        | 404000    |          |              |         |                 | Dein-ImmoCenter                             |
+| https://www.immowelt.de/expose/2cy6h53 | 2cy6h53 | Eigentumswohnung in 50935 Köln                                                           | 156        | k.A.   | 50935 Köln  (Lindenthal)   | 1285000   |          |              |         |                 | Dein-ImmoCenter                             |
+
+
+Information in the title of the ad:
+27z3n5f -> 3
+27dts5f -> 3
+2ban958 -> 3
+
+Information following the link:
+2bgxe58	-> 2
+2bpjw5m -> 3
+2b6sa5p -> 2
+2b4fw5p -> 3
+2b2gw5p -> 2
+2bvgu5t -> 3
+2bw5t5v -> 3
+2b6zx5x -> 3
+2cy6h53 -> 3
+
+
+UPDATE wohnung_kaufen
+SET zimmer = 2
+WHERE ref_num IN("2bgxe58", "2b6sa5p", "2b2gw5p")
+
+UPDATE wohnung_kaufen
+SET zimmer = 3
+WHERE ref_num IN("27z3n5f", "27dts5f", "2ban958", "2bpjw5m", "2b4fw5p", 
+                "2bvgu5t", "2bw5t5v", "2b6zx5x", "2cy6h53")
 
 
 
+SELECT *
+FROM wohnung_kaufen
+WHERE zimmer = 0
+
+| link                                   | ref_num | anzeige                                                       | wohnfläche | zimmer | ort                        | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                |
+|----------------------------------------|---------|---------------------------------------------------------------|------------|--------|----------------------------|-----------|----------|--------------|---------|-----------------|-----------------------|
+| https://www.immowelt.de/expose/2ap3n5v | 2ap3n5v | Interessante Kapitalanlage im 4 Sterne Hotel Mercure in Köln! | 60         | k.A.   | 50676 Köln  (Altstadt-Süd) | 195000    |          |              | 1989    | D               | Immo Projekte P2 GmbH |
+
+-- It remains only an ad that refers to an hotel room. 
+-- Due to the nature of the offer, provided to delete it
+
+DELETE 
+FROM wohnung_kaufen
+WHERE ref_num = "2ap3n5v"
+
+-- Identified the number of null values in the column "ort"
+
+SELECT count(anzeige) as null_ort
+FROM wohnung_kaufen
+WHERE ort = ""
 
 
+| null_ort |
+|----------|
+| 0        |
 
 
+-- Identified the number of null values in the column "kaufpreis"
+SELECT count(anzeige) as null_kaufpreis
+FROM wohnung_kaufen
+WHERE kaufpreis = 0
+
+| null_kaufpreis |
+|----------------|
+| 2              |
+
+SELECT *
+FROM wohnung_kaufen
+WHERE kaufpreis = 0
+
+| link                                   | ref_num | anzeige                                                                             | wohnfläche | zimmer | ort                        | kaufpreis   | hausgeld | wohnungslage               | baujahr | effizienzklasse | makler                        |
+|----------------------------------------|---------|-------------------------------------------------------------------------------------|------------|--------|----------------------------|-------------|----------|----------------------------|---------|-----------------|-------------------------------|
+| https://www.immowelt.de/expose/2btgf57 | 2btgf57 | Preis auf Anfrage: Apartment in Köln-Nippes, ca. 35 qm, vermietet.                  | 35         | 1      | 50733 Köln  (Nippes)       | auf Anfrage | 170      | 1. Geschoss                | 1993    | D               | Tre Orsetti Cologne e.K.      |
+| https://www.immowelt.de/expose/2c5rj5c | 2c5rj5c | Top-Investment: 6,5 % Rendite p.a. mit Eigentumswohnung in Köln-Südstadt, Ubierring | 140        | 4      | 50678 Köln  (Neustadt-Süd) | auf Anfrage |          | 4. Geschoss (Dachgeschoss) | 1906    |                 | Stiftungsberatung Dr. Kade KG |
 
 
+-- deleted the 2 rows due to the lack in price (only by request)
+
+DELETE
+FROM wohnung_kaufen
+WHERE kaufpreis = 0
 
 
+-- Identified the number of null values in the column "hausgeld"
 
-
-
-
-
-
-
-
-
-
-
+SELECT count(ref_num) as null_hausgeld
+FROM wohnung_kaufen
+WHERE hausgeld = 0
 
 
 
