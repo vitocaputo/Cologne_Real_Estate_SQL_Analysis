@@ -339,24 +339,299 @@ SELECT count(ref_num) as null_hausgeld
 FROM wohnung_kaufen
 WHERE hausgeld = 0
 ```
+| null_hausgeld |
+|---------------|
+| 160           |
 
 
+```sql
+-- Identified the number of null values in the column "makler"
+
+SELECT count(ref_num) as null_makler
+FROM wohnung_kaufen
+WHERE makler = ""
+```
+| null_makler |
+|-------------|
+| 72          |
+
+```sql
+-- Set as private offer where the column "makler" is null
+
+UPDATE wohnung_kaufen
+SET makler = "Privatanbieter"
+WHERE makler = ""
+```
+```sql
+-- Convert the column "wohnfläche, kaufpreis, hausgeld, zimmer as float
+
+ALTER TABLE "immo_köln"."wohnung_kaufen" 
+CHANGE COLUMN "wohnfläche" "wohnfläche" FLOAT NULL DEFAULT NULL ;
+CHANGE COLUMN "kaufpreis" "kaufpreis" FLOAT NULL DEFAULT NULL ;
+CHANGE COLUMN "hausgeld" "hausgeld" FLOAT NULL DEFAULT NULL ;
+CHANGE COLUMN "zimmer" "zimmer" FLOAT NULL DEFAULT NULL ;
+```
+---
+
+## e. Dealing with outliers
+
+---
+
+```sql
+-- Checked the value range of the living area
+
+SELECT 
+    MIN(wohnfläche) as min_wf,
+    MAX(wohnfläche) as max_wf
+FROM wohnung_kaufen
+```
+| min_wf | max_wf |
+|--------|--------|
+| 18     | 314    |
 
 
+```sql
+-- Checked the value range of the rooms
 
+SELECT zimmer, 
+    count(zimmer) as n_ads
+FROM wohnung_kaufen
+GROUP BY zimmer
+ORDER BY zimmer DESC
+```
 
+| zimmer | n_ads |
+|--------|-------|
+| 7      | 1     |
+| 6      | 10    |
+| 5      | 19    |
+| 4      | 119   |
+| 3      | 325   |
+| 2      | 196   |
+| 1      | 54    |
 
+```sql
+-- Checking if in the column ort there are only postal codes of Cologne (doesn´t start with 5)
 
+SELECT *
+FROM wohnung_kaufen
+WHERE ort NOT LIKE '5%';
+```
 
+| link                                   | ref_num | anzeige                                                           | wohnfläche | zimmer | ort                           | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                  |
+|----------------------------------------|---------|-------------------------------------------------------------------|------------|--------|-------------------------------|-----------|----------|--------------|---------|-----------------|-------------------------|
+| https://www.immowelt.de/expose/2bzfs5x | 2bzfs5x | Geräumige Wohnung mit großem Balkon in ruhiger Lage ++AB SOFORT++ | 63         | 3      | 70378 Stuttgart  (Marienburg) | 265000    | 491      | 1. Geschoss  | 1988    |                 | Immo-Team GmbH & Co. KG |
 
+```sql
+-- The ad refers to an apartment in Stuttgart, for this reason provided to delete it
 
+DELETE FROM wohnung_kaufen
+WHERE ref_num = "2bzfs5x"
+```
+```sql
+-- Checked the range of the house prices
 
+SELECT 
+    min(kaufpreis) as min_price,
+    max(kaufpreis) as max_price
+FROM wohnung_kaufen
+```
+| min_price | max_price |
+|-----------|-----------|
+| 4878      | 3900000   |
 
+```sql
+-- Selected all ads whose price is below 30.000 €
 
+SELECT *
+FROM wohnung_kaufen
+WHERE kaufpreis < 30000
+```
+| link                                   | ref_num | anzeige                                                                                                               | wohnfläche | zimmer | ort                | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler        |
+|----------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------|------------|--------|--------------------|-----------|----------|--------------|---------|-----------------|---------------|
+| https://www.immowelt.de/expose/2bwpy5d | 2bwpy5d | Rundbogenhalle mit PVC Plane in Weiß Quadratmeterfläche - 91,50m^2 - Tierstall, Industriehalle, Waren/Holz/Strohlager | 92         | 1      | 50937 Köln  (Sülz) | 4878      | 0        |              |         |                 | Covertop GmbH |
 
+```sql
+-- The ad refers to a container, for this reason deleted
 
+DELETE FROM wohnung_kaufen
+WHERE ref_num = "2bwpy5d"
+```
 
+| link                                   | ref_num | anzeige                                                                                | wohnfläche | zimmer | ort                           | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                                         |
+|----------------------------------------|---------|----------------------------------------------------------------------------------------|------------|--------|-------------------------------|-----------|----------|--------------|---------|-----------------|------------------------------------------------|
+| https://www.immowelt.de/expose/27kcb5h | 27kcb5h | Penthaus mit Rheinblick                                                                | 137        | 4      | 50668 Köln  (Neustadt-Nord)   | 1568800   | 11343    |              | Neubau  |                 | S Immobilienpartner GmbH                       |
+| https://www.immowelt.de/expose/27cfd5h | 27cfd5h | Ideale Stadtwohnung mit Dachterrasse                                                   | 88         | 3      | 50668 Köln  (Neustadt-Nord)   | 989800    | 10813    | 4. Geschoss  | Neubau  |                 | S Immobilienpartner GmbH                       |
+| https://www.immowelt.de/expose/2be625g | 2be625g | TOP GELEGENHEIT: modernisierte Maisonette in Rheinnähe mit Domblick in Köln-Bayenthal  | 79         | 3      | 50968 Köln / Bayenthal        | 395000    | 15000    |              | 1895    |                 | AmRhein ImmobilienManagement GmbH              |
+| https://www.immowelt.de/expose/2bejj52 | 2bejj52 | EIGENNUTZUNG ODER KAPITALANLAGE IN KÖLN-BILDERSTÖCKCHEN MIT TRAUMHAFTER RAUMAUFTEILUNG | 84         | 3      | 50739 Köln  (Bilderstöckchen) | 325000    | 20000    |              | 1968    | E               | Com-Plex Immobilien & Facility Management GmbH |
+| https://www.immowelt.de/expose/2b8e659 | 2b8e659 | Wunderschönes Penthouse in exklusiver Lage am Kanal im Stadtwaldviertel                | 222        | 6      | 50858 Köln  (Junkersdorf)     | 1850000   | 30000    |              | 2005    |                 | INPREX-IMMO GmbH                               |
+| https://www.immowelt.de/expose/2bexs5e | 2bexs5e | Neubau Maisonette-Wohnung für die Familie nähe Rheinwiesen                             | 167        | 4      | 51149 Köln  (Ensen)           | 799900    | 27500    |              | 2023    |                 | Uckelmann Immobilien, Boarding Concept         |
+| https://www.immowelt.de/expose/2bpys5e | 2bpys5e | Haus im Haus - Neubau-Maisonette-Wohnung in Rheinnhähe                                 | 167        | 4      | 51149 Köln  (Ensen)           | 799900    | 27500    |              | 2023    |                 | Uckelmann Immobilien, Boarding Concept         |
+| https://www.immowelt.de/expose/2baku5k | 2baku5k | Stadthaus in Marienburg                                                                | 124        | 4      | 50968 Köln  (Marienburg)      | 1179700   | 39900    |              |         |                 | S Immobilienpartner GmbH                       |
+| https://www.immowelt.de/expose/2bcku5k | 2bcku5k | Modernes Stadthaus das begeistert                                                      | 123        | 4      | 50968 Köln  (Marienburg)      | 1179700   | 39900    |              |         |                 | S Immobilienpartner GmbH                       |
+| https://www.immowelt.de/expose/2chtf56 | 2chtf56 | Super zentral gelegene 3-Zimmer-Wohnung mit Terrasse, Garten, offener EBK und 2 Bädern | 104        | 3      | 50676 Köln  (Altstadt-Süd)    | 1100000   | 10577    | Erdgeschoss  | 2016    | B               | Homeday GmbH                                   |
+| https://www.immowelt.de/expose/2cwts5d | 2cwts5d | Exklusive Neubau EG Wohnung in Köln Rodenkirchen                                       | 150        | 4      | 50999 Köln  (Rodenkirchen)    | 1165000   | 15000    | Erdgeschoss  | 2023    |                 | VESER Real Estate GmbH & Co. KG                |
+| https://www.immowelt.de/expose/2cwdj5b | 2cwdj5b | Die ideale Zweizimmer-Wohnung mit Sonnen-Loggia!!!                                     | 58         | 2      | 51145 Köln  (Urbach)          | 169000    | 20000    | 1. Geschoss  |         |                 | Privatanbieter                                 |
+| https://www.immowelt.de/expose/2bg6t5b | 2bg6t5b | Verkauf ETW / 3 Zimmer / Balkon / Garage                                               | 89         | 3      | 50769 Köln  (Worringen)       | 253000    | 12000    | 1. Geschoss  | 1968    |                 | Privatanbieter                                 |
+| https://www.immowelt.de/expose/227d85z | 227d85z | TOP-PREIS für möblierte 2 Zimmer-Whg. in Porz-Ensen mit sehr guter Verkehrsanbindung   | 53         | 2      | 51149 Köln  (Ensen)           | 295000    | 30000    |              | 1965    |                 | Emlak AG                                       |
 
+#### The scraping of the condominium fee column did not return reliable results, as in each ad the row returned the price for the parking place or of the price per square meter.
+#### Since this is not data that can be relied on, decided not to use it for the analysis
+
+```sql
+-- Separate the postal code from the neighborhood, creating two new column 
+
+ALTER TABLE wohnung_kaufen
+ADD COLUMN plz VARCHAR(255),
+ADD COLUMN stadtteil VARCHAR(255);
+
+UPDATE wohnung_kaufen
+SET
+plz = TRIM(SUBSTRING_INDEX(ort, ' ', 1)),
+stadtteil = TRIM(SUBSTRING_INDEX(ort, ' ', -1))
+```
+```sql
+-- Checked if there are postal code values with lenght below 5
+
+SELECT plz 
+FROM wohnung_kaufen 
+WHERE LENGTH(ort) < 5
+```
+||||
+
+```sql
+-- Saw the "stadtteil" column 
+SELECT stadtteil
+FROM wohnung_kaufen
+```
+| stadtteil      |
+|----------------|
+| (Neuehrenfeld) |
+| (Neustadt-Süd) |
+| (Altstadt-Süd) |
+| (Neuehrenfeld) |
+| (Ehrenfeld)    |
+| ...            |
+
+```sql
+-- Eliminated the parenthesis and the suffix "köln-"
+
+UPDATE wohnung_kaufen
+SET stadtteil = REPLACE(stadtteil, "(", "")
+
+UPDATE wohnung_kaufen
+SET stadtteil = REPLACE(stadtteil, ")", "")
+
+UPDATE wohnung_kaufen
+SET stadtteil = REPLACE(stadtteil, "Köln-", "")
+```
+```sql
+-- Checked the results
+
+SELECT stadtteil
+FROM wohnung_kaufen
+GROUP BY stadtteil
+```
+| stadtteil            |
+|----------------------|
+| Neuehrenfeld         |
+| Neustadt-Süd         |
+| Altstadt-Süd         |
+| Ehrenfeld            |
+| Buchheim             |
+| Porz                 |
+| Neustadt-Nord        |
+| Niehl                |
+| Humboldt-Gremberg    |
+| Höhenberg            |
+| Urbach               |
+| Weiden               |
+| Holweide             |
+| Weidenpesch          |
+| Altstadt-Nord        |
+| Nippes               |
+| Bickendorf           |
+| Riehl                |
+| Rondorf              |
+| Mülheim              |
+| Mauenheim            |
+| Esch/Auweiler        |
+| Widdersdorf          |
+| Zollstock            |
+| Braunsfeld           |
+| Vingst               |
+| Sürth                |
+| Wahnheide            |
+| Grengel              |
+| Westhoven            |
+| Dellbrück            |
+| Raderberg            |
+| Kalk                 |
+| Zündorf              |
+| Deutz                |
+| Poll                 |
+| Gremberghoven        |
+| Neubrück             |
+| Lindenthal           |
+| Bocklemünd/Mengenich |
+| Junkersdorf          |
+| Merheim              |
+| Eil                  |
+| Ossendorf            |
+| Seeberg              |
+| Rodenkirchen         |
+| Ostheim              |
+| Bayenthal            |
+| Höhenhaus            |
+| Bilderstöckchen      |
+| Rath/Heumar          |
+| Klettenberg          |
+| Merkenich            |
+| Meschenich           |
+| Longerich            |
+| Heimersdorf          |
+| Ensen                |
+| Raderthal            |
+| Sülz                 |
+| Volkhoven/Weiler     |
+| Langel               |
+| Alt-Longerich        |
+| Lövenich             |
+| Pesch                |
+| Müngersdorf          |
+| Elsdorf              |
+| Worringen            |
+| Marienburg           |
+| Dünnwald             |
+| Flittard             |
+| Brück                |
+| Buchforst            |
+| Weiß                 |
+| Neu-Weiß             |
+| Lind                 |
+| Köln                 |
+| Lindweiler           |
+| Stammheim            |
+| Vogelsang            |
+
+```sql
+-- Investigated the ad with neighborhood "Köln"
+
+SELECT *
+FROM wohnung_kaufen
+WHERE stadtteil = "Köln"
+```
+| link                                   | ref_num | anzeige                                              | wohnfläche | zimmer | ort                    | kaufpreis | hausgeld | wohnungslage | baujahr | effizienzklasse | makler                         | plz   | stadtteil |
+|----------------------------------------|---------|------------------------------------------------------|------------|--------|------------------------|-----------|----------|--------------|---------|-----------------|--------------------------------|-------|-----------|
+| https://www.immowelt.de/expose/2bqbh5z | 2bqbh5z | Wohntraum auf 2 Ebenen: Doppelgarage und Süd-Balkon! | 108        | 4      | 50968 Raderberg / Köln | 529000    | 491      |              | 1993    | E               | FALC Immobilien Köln & Pulheim | 50968 | Köln      |
+
+```sql
+-- Updated the neighborhood value with the correct information 
+
+UPDATE wohnung_kaufen
+SET stadtteil = "Raderberg"
+WHERE ref_num = "2bqbh5z"
+```
 
 
 
