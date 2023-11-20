@@ -2,7 +2,7 @@
 
 ## WOHNUNG_KAUFEN table 
 ---
-### a. Explore the table structure
+# 1. Explore the table structure
 
 ---
 ```sql
@@ -29,7 +29,7 @@ FROM wohnung_kaufen
 
 ---
 
-### b. Manage duplicates
+# 2. Manage duplicates
 
 ---
 
@@ -176,7 +176,7 @@ WHERE ref_num IN("2cmqt5c", "2c6wt5c", "2cbmt5c", "2cxut5c",
 ```
 ---
 
-# c. Manage missing values
+# 3. Manage missing values
 
 ---
 ```sql
@@ -373,7 +373,7 @@ CHANGE COLUMN "zimmer" "zimmer" FLOAT NULL DEFAULT NULL ;
 ```
 ---
 
-## e. Dealing with outliers
+# 4. Dealing with outliers
 
 ---
 
