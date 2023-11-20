@@ -2,7 +2,7 @@
 
 ## HAUS_KAUFEN table 
 
-### a. Explore the table structure
+# 1. Explore the table structure
 ---
 ```sql
 SELECT *
@@ -18,7 +18,7 @@ FROM haus_kaufen
 | https://www.immowelt.de/expose/25eyv5u | CGN Köln Mehrfamilienhaus                                                      | 764        | 25     | 562        | 50670 Köln              | 3.165.000 | Mehrfamilienhaus |                                                                 |         |                 |
 ---
 
-### b. Manage duplicates
+# 2. Manage duplicates
 
 ---
 ```sql
@@ -282,7 +282,7 @@ WHERE ref_num = '2bmuc56'
 ---
 
 
-### c. Manage missing value
+# 3. Manage missing value
 
 ---
 ```sql
@@ -506,7 +506,7 @@ WHERE
 ---
 
 
-### d. Convert Data Type
+# 4. Convert Data Type
 #### All the values are imported in mySQL as a string. The data have to be modified before convert the data type
 
 ---
@@ -753,4 +753,22 @@ GROUP BY kategorie
 | Herrenhaus              |
 | Grundstück              |
 | Reiheneckhaus           |
+
+```sql
+-- Created a column with postal code, to have information about the neigborhood
+ALTER TABLE haus_kaufen
+ADD COLUMN plz VARCHAR(255);
+
+UPDATE haus_kaufen
+SET plz = TRIM(SUBSTRING_INDEX(ort, ' ', 1))
+```
+
+```sql
+-- Joind the table of houses in sale with the city area table
+SELECT *
+FROM haus_kaufen AS hk
+LEFT JOIN plz_koeln as pk
+ON hk.plz = pk.plz
+```
+
 
