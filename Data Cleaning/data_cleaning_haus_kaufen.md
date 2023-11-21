@@ -770,5 +770,21 @@ FROM haus_kaufen AS hk
 LEFT JOIN plz_koeln as pk
 ON hk.plz = pk.plz
 ```
-
-
+```sql
+WITH st AS (
+SELECT link, ref_num, anzeige, hk.plz, stadtteil, wohnfläche, zimmer, grundstück, kaufpreis, kategorie
+FROM haus_kaufen AS hk
+LEFT JOIN plz_koeln as pk
+ON hk.plz = pk.plz)
+SELECT *
+FROM st 
+WHERE stadtteil is null
+```
+| link                                   | ref_num | anzeige                                            | plz   | stadtteil | wohnfläche | zimmer | grundstück | kaufpreis | kategorie        |
+|----------------------------------------|---------|----------------------------------------------------|-------|-----------|------------|--------|------------|-----------|------------------|
+| https://www.immowelt.de/expose/294mm5a | 294mm5a | Mehrfamilienhaus Kapitalanlage mit 4 Wohneinheiten | 51096 | null      | 280        | 11     | 770        | 839000    | Mehrfamilienhaus |
+| https://www.immowelt.de/expose/2bzb65d | 2bzb65d | Stadthaus mit Charme in bester Lage: Marienburg    | 50698 | null      | 207        | 6      | 328        | 1750000   | Reihenmittelhaus |
+```sql
+INSERT INTO plz_koeln(plz, stadtteil)
+VALUES ("51096", "Dünnwald"), ("50698", "Marienburg")
+```
