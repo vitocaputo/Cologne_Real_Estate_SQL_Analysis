@@ -632,6 +632,15 @@ UPDATE wohnung_kaufen
 SET stadtteil = "Raderberg"
 WHERE ref_num = "2bqbh5z"
 ```
+Decided to join it with the table of postal codes to obtain the same resuts for all table
+```sql
+SELECT *
+FROM wohnung_kaufen as wk
+LEFT JOIN plz_koeln as pl
+ON wk.plz = pl.plz
+GROUP BY pl.stadtteil
+ORDER BY count(*) DESC
+```
 
 
 
