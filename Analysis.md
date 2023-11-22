@@ -26,7 +26,7 @@ ORDER BY num_ads DESC
 
 ## 2. What is the price per square meter by ad type?
 
-- Hoses in sale
+- Houses in sale
 ```sql
 -- SM average price by houses in sale
 
@@ -999,6 +999,7 @@ GROUP BY ref_num,anz,kaufpreis, wohnfläche,zimmer,grundstück,stadtteil
 | 2clhx5c | + Großzügiges Einfamilienhaus mit 4 Garagen +                                     | 1405000   | 197        | 5      | 2016       | Wahn            |
 | 2c2hx5c | 2-Familienhaus mit Garage + provisionsfrei +                                      | 630000    | 118        | 7      | 513        | Weidenpesch     |
 | 2cdhx5c | Einfamilienhaus mit Garten ++ provisionsfrei ++                                   | 800000    | 110        | 4      | 1213       | Holweide        |
+
 ```sql
 SELECT
   concat("€ ", format(AVG(kaufpreis), 0, "de_DE")) AS "NO AUCTION houses - Average price",
