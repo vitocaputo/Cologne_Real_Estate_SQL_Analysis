@@ -424,7 +424,7 @@ GROUP BY ref_num,
     makler
 ```
 
-- Houses in salq by neighborhood
+- Houses in sale by neighborhood
 ```sql
 SELECT 
     stadtteil as neighborhood,
@@ -646,7 +646,7 @@ ORDER BY count(*) DESC
 | Sürth                | Wohn- und Geschäftshaus | 1              |
 | Altstadt/Süd         | Doppelhaushälfte        | 1              |
 
-- Apartments in salq by neighborhood
+- Apartments in sale by neighborhood
 ```sql
 SELECT 
     stadtteil as neighborhood,
