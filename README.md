@@ -49,7 +49,8 @@ The Analysis is generally oriented toward finding the areas where it is most con
 Finally was made a visualization map in Tableau to easily search the ads trough the Cologne neighborhoods.
 Link to the Tableau work: [Houses&Apartments_Cologne](https://public.tableau.com/app/profile/vito.caputo/viz/Housesandapartments_Cologne/Dashboard)
 
-![image](https://github.com/vitocaputo/Cologne_Real_Estate_SQL_Analysis/assets/149478650/7ba6c062-438c-4b92-848b-abb10a6f6d8d)
+![image](https://github.com/vitocaputo/Cologne_Real_Estate_SQL_Analysis/assets/149478650/4b112a7a-987d-492c-8a06-1a09bec24b51)
+
 
 
 
