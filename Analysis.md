@@ -850,7 +850,7 @@ GROUP BY stadtteil;
 ## 7. Are there any price differences between houses or apartments if negotiations are handled privately or by a real estate agency?
 
 
--- House in sale
+- House in sale
 ```sql
 SELECT  
     CASE WHEN makler = "Privatanbieter" or makler = "ohne-makler.net - Immobilien selbst vermarkten" 
@@ -865,7 +865,7 @@ GROUP BY sale_type
 | house agent sale   | 376   | € 1.012.269 |
 | house private sale | 51    | € 1.291.498 |
 
--- Apartment in sale
+- Apartment in sale
 ```sql
 SELECT  
     CASE WHEN makler = "Privatanbieter" or makler = "ohne-makler.net - Immobilien selbst vermarkten" 
