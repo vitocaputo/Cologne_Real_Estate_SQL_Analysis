@@ -890,12 +890,12 @@ SELECT
     CONCAT("€ ", FORMAT(AVG(kaltmiete),0, "de_DE")) as avg_cold_rent
 FROM haus_mieten
 GROUP BY sale_type
-
+```
 | sale_type          | n_ads | avg_cold_rent |
 |--------------------|-------|---------------|
 | house private rent | 3     | € 2.530       |
 | house agent rent   | 4     | € 2.698       |
-```
+
 
 - Apartments for rent
 ```sql
