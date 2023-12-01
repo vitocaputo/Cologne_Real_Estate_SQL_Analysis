@@ -9,7 +9,7 @@ The CSV files obtained are:
 5. haus_mieten: that is, the list of houses for rent
 5. wohnung_mieten: i.e., the list of apartments for rent
 
-# 1. Data cleaning
+# Data cleaning
 
 The process was done with mySQL, on the csv files.
 To take a view of the steps performed, see:
